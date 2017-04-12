@@ -10,15 +10,14 @@
 #define Type int
 void Init(List* L)//初始化链表
 {
-    L->head = (Node*)malloc(sizeof(Node));
-    if(L->head == NULL)
+	//Allocation.Need to examine whether allocation fails or not.
+    if(!(L->head = (Node*)malloc(sizeof(Node))))
     {
         printf("error!\n");
         exit(1);
     }
     L->head->next = L->head->prev = NULL;
-    L->tail = (Node*)malloc(sizeof(Node));
-    if(L->tail == NULL)
+    if(!(L->tail = (Node*)malloc(sizeof(Node))))
     {
         printf("error!\n");
         exit(1);
@@ -30,20 +29,7 @@ void Init(List* L)//初始化链表
 }
 void Exchange(Node* n1,Node* n2)//为什么一直有问题??交换两个结点？？。。。。。。已放弃，直接走捷径，八个线条调试难
 {
-   /*
-    Node* temp = Get_prev(n1);
-    Node* temp2 = Get_next(n1);
-    Node* temp3 = Get_prev(n2);
-    Node* temp4 = Get_next(n2);
-    n1->prev = temp3;
-    temp->next = n2;
-    n2->prev = temp;
-    temp2->prev = n2;
-    n2->next = temp2;
-    temp3->next = n1;
-    temp4->prev = n1;
-    n1->next = temp4;
-    */
+	//Could not think of any better method other than this to solve the exchange problem
     Node* temp1,*temp2;
     n1->prev->next = n2;
     temp1 = n2->prev;
@@ -56,7 +42,7 @@ void Exchange(Node* n1,Node* n2)//为什么一直有问题??交换两个结点�
     temp2->prev = n1;
     n1->next = temp2;
 }
-void ExchangeNew(Node* q,Node* p)
+void ExchangeNew(Node* q,Node* p)//when q->next = p,use this function
 {
     q->prev->next = p;
     p->prev= q->prev;
@@ -65,7 +51,7 @@ void ExchangeNew(Node* q,Node* p)
     q->prev = p;
     p->next = q;
 }
-Node* Max3(List* L,Node*last)
+Node* Max3(List* L,Node*last)//Exchange nodes rather than data.
 {
     Node* p,*q,*max = Get_prev(last);
     for(q = Begin(L); q != Get_prev(last); q = Get_next(q))
@@ -91,7 +77,7 @@ void Selection3(List* L)
         last = Get_prev(last);
     }
 }
-Node* Max2(List* L,Node*begin)
+Node* Max2(List* L,Node*begin)//Simply exchange data
 {
     Node*max = begin,*p;
     Type temp;
@@ -150,7 +136,7 @@ void Bubble(List* L)//冒泡排序
             if( Get_data(first) > Get_data(Get_next(first)))
             {
                 ExchangeNew(first, Get_next(first));
-                first = Get_prev(first);
+                first = Get_prev(first);//For first has been changed previously
             }
         }
         last = Get_prev(last);
@@ -252,9 +238,7 @@ int Empty(List* L)
 void Clear(List* L)
 {
     while(!Empty(L))
-    {
         Pop_front(L);
-    }
 }
 void Free(List* L)
 {
